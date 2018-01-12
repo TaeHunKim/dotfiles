@@ -15,8 +15,8 @@ done
 #
 
 case `uname` in
-  Darwin) source $HOME/program_store/dotfiles/rc/profile_Darwin ;;
-  Linux)  source $HOME/program_store/dotfiles/rc/profile_Linux ;;
+  Darwin) source $HOME/programs/dotfiles/rc/profile_Darwin ;;
+  Linux)  source $HOME/programs/dotfiles/rc/profile_Linux ;;
 esac
 
 SEDI_OPTION="-r"
@@ -66,7 +66,7 @@ vl() {
 # Git
 #
 
-source $HOME/program_store/dotfiles/ben_profile/git_completion
+source $HOME/programs/dotfiles/ben_profile/git_completion
 
 complete -o default -o nospace -F _git_branch changed
 complete -o default -o nospace -F _git_branch cherry-pick

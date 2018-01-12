@@ -4,8 +4,8 @@
 "==================== VIM Set ====================="
 set nu
 set ai
-set ts=2
-set sw=2
+set ts=4
+set sw=4
 set expandtab  "tab as space
 au Bufenter *.\(c\|cpp\h\)set et
 set cindent
@@ -77,13 +77,13 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'git://git.wincent.com/command-t.git'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'user/L9', {'name': 'newL9'}
+"Plugin 'user/L9', {'name': 'newL9'}
 
 Plugin 'FuzzyFinder'
 Plugin 'a.vim'
 Plugin 'fugitive.vim'
 Plugin 'taglist.vim'
-Plugin 'minibufexpl.vim'
+"Plugin 'minibufexpl.vim'
 Plugin 'Syntastic'
 "snipmate for auto complete
 Plugin 'superSnipMate'
@@ -95,6 +95,18 @@ Plugin 'SuperTab'
 Plugin 'scrooloose/nerdtree'
 
 Plugin 'kien/ctrlp.vim'
+
+Plugin 'jremmen/vim-ripgrep'
+
+"Plugin 'vim-scripts/Conque-GDB'
+"
+Plugin 'vim-airline/vim-airline'
+
+Plugin 'airblade/vim-gitgutter'
+
+Plugin 'rhysd/vim-clang-format'
+
+Plugin 'vim-airline/vim-airline-themes'
 
 call vundle#end()
 
@@ -111,21 +123,49 @@ if filereadable("./cscope.out")
   set cst
 elseif filereadable("./cscope.out")
   cs add ../cscope.out
-  set cst
-elseif filereadable("./cscope.out")
-  cs add ../../cscope.out
-  set cst
 endif
-                                
-nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-\>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+"=================CLang-format================"
 
-function! CommitTemplate()
-  r ~/work/program_store/dotfiles/vim/template.txt
-endfunction
+" clang-format
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" Toggle auto formatting:
+nmap <Leader>C :ClangFormatAutoToggle<CR>
+let g:clang_format#style_options = {
+           \ "Language" : "Cpp",
+           \ "BasedOnStyle" : "WebKit",
+           \ "IndentCaseLabels" : "true",
+           \ "NamespaceIndentation" : "None",
+           \ "Standard" : "Cpp11"}
+
+"autocmd FileType c,cpp,objc,h ClangFormatAutoEnable
+
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --color=never
+endif
+     
+nnoremap K :grep! "\b\s?<C-R><C-W>\b"<CR>:cw<CR>
+
+let g:ConqueTerm_Color = 2         " 1: strip color after 200 lines, 2: always with color
+let g:ConqueTerm_CloseOnEnd = 1    " close conque when program ends running
+let g:ConqueTerm_StartMessages = 0 " display warning messages if conqueTerm is configured incorrectly
+
+" for vim-airline
+let g:airline#extensions#tabline#enabled = 1 " turn on buffer list
+let g:airline_theme='hybrid'
+set laststatus=2 " turn on bottom bar
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#formatter = 'default'
+nnoremap <C-S-Left> <Esc>:sbprevious<CR>
+nnoremap <C-S-Right> <Esc>:sbnext<CR>
+let g:airline_powerline_fonts = 1
+
+"Lines for SAP HANA
+let g:sql_type_default = 'sqlhana' 
+
+"Lines for HANA newt
+au BufNewFile,BufRead */newt/*.py set filetype=newt
+au FileType newt syntax sync fromstart
